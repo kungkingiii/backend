@@ -188,13 +188,13 @@ app.get("/profile", authenticate, async (req, res) => {
   res.json({ userData: userData.rows[0], userCouse });
 });
 
-app.post("/delete", async (req, res) => {
+app.delete("/delete", async (req, res) => {
   try {
-    await pool.query(
-      "DROP TABLE users"
-    );
+    await pool.query("DROP TABLE IF EXISTS users CASCADE;");
+    res.json({ message: "✅ ลบตาราง users เรียบร้อยแล้ว" });
   } catch (err) {
-    res.status(500).json({ message: "เกิดข้อผิดพลาด" });
+    console.error("❌ Error deleting table:", err);
+    res.status(500).json({ message: "เกิดข้อผิดพลาดในการลบตาราง" });
   }
 });
 //===============================================================

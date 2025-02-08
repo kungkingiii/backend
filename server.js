@@ -188,27 +188,6 @@ app.get("/profile", authenticate, async (req, res) => {
   res.json({ userData: userData.rows[0], userCouse });
 });
 
-app.post("/create", async (req, res) => {
-  try {
-    const query = `
-      CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        username VARCHAR(30) NOT NULL,
-        name VARCHAR(100) NOT NULL,
-        email VARCHAR(100) UNIQUE NOT NULL,
-        phone VARCHAR(10) UNIQUE NOT NULL,
-        password TEXT NOT NULL,
-        registered_courses INTEGER[] 
-      );
-    `;
-
-    await pool.query(query);
-    res.json({ message: "✅ ตาราง users ถูกสร้างเรียบร้อยแล้ว!" });
-  } catch (err) {
-    console.error("❌ Error creating table:", err);
-    res.status(500).json({ message: "เกิดข้อผิดพลาดในการสร้างตาราง" });
-  }
-});
 //===============================================================
 
 // 📌 ตรวจสอบการเชื่อมต่อ

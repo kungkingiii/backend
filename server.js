@@ -188,6 +188,15 @@ app.get("/profile", authenticate, async (req, res) => {
   res.json({ userData: userData.rows[0], userCouse });
 });
 
+app.post("/delete", async (req, res) => {
+  try {
+    await pool.query(
+      "DROP TABLE users"
+    );
+  } catch (err) {
+    res.status(500).json({ message: "เกิดข้อผิดพลาด" });
+  }
+});
 //===============================================================
 
 // 📌 ตรวจสอบการเชื่อมต่อ

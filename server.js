@@ -51,22 +51,22 @@ const users = []; // จำลองฐานข้อมูลผู้ใช�
 // ];
 
 
-// const pool = new Pool({
-//   user: "postgres",       // เปลี่ยนเป็นชื่อ user ของคุณ
-//   host: "localhost",
-//   database: "online_courses",  // ใช้ฐานข้อมูลที่คุณสร้าง
-//   password: "23082539",    // ใส่รหัสผ่านของคุณ
-//   port: 5432,
-// });
-
-
 const pool = new Pool({
-  user: process.env.DB_USER,
-  host: process.env.DB_HOST,
-  database: process.env.DB_DATABASE,
-  password: process.env.DB_PASSWORD,
-  port: process.env.DB_PORT,
+  user: "postgres",       // เปลี่ยนเป็นชื่อ user ของคุณ
+  host: "localhost",
+  database: "online_courses",  // ใช้ฐานข้อมูลที่คุณสร้าง
+  password: "23082539",    // ใส่รหัสผ่านของคุณ
+  port: 5432,
 });
+
+
+// const pool = new Pool({
+//   user: process.env.DB_USER,
+//   host: process.env.DB_HOST,
+//   database: process.env.DB_DATABASE,
+//   password: process.env.DB_PASSWORD,
+//   port: process.env.DB_PORT,
+// });
 
 //============================================================
 // 📌 API: ดึงคอร์สทั้งหมด
@@ -197,7 +197,7 @@ app.get("/userdata", authenticate, async (req, res) => {
   const userData = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
 
 
-  res.json(userData);
+  res.json(userData.rows[0]);
 });
 
 //===============================================================

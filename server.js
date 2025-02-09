@@ -76,7 +76,7 @@ app.post("/register", async (req, res) => {
     if (checkUser.rows.length > 0) {
       return res.status(400).json({ message: "username already exist" });
     }
-    const checkEmail = await pool.query("SELECT * FROM users WHERE email = $3", [email]);
+    const checkEmail = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
 
     if (checkEmail.rows.length > 0) {
       return res.status(400).json({ message: "email already exist" });
@@ -90,7 +90,7 @@ app.post("/register", async (req, res) => {
     res.status(201).json({ message: "register success", user: newUser.rows[0] });
   } catch (err) {
     console.error("Error registering user:", err);
-    res.status(500).json({ message: "something wrong on server" });
+    res.status(500).json({ message: "something wrong on server" }, err);
   }
 });
 

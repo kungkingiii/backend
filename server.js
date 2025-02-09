@@ -188,6 +188,18 @@ app.get("/profile", authenticate, async (req, res) => {
   res.json({ userData: userData.rows[0], userCouse });
 });
 
+// 📌 API: ดึงข้อมูลโปรไฟล์ (ต้องใช้ Token)
+app.get("/userdata", authenticate, async (req, res) => {
+
+  const username = req.user.username;
+
+
+  const userData = await pool.query("SELECT * FROM users WHERE username = $1", [username]);
+
+
+  res.json(userData);
+});
+
 //===============================================================
 
 // 📌 ตรวจสอบการเชื่อมต่อ

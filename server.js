@@ -33,6 +33,46 @@ const pool = new Pool({
   port: process.env.DB_PORT,
 });
 
+// ==================== INIT DB ====================
+const initDB = async () => {
+  try {
+    // ตาราง users
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS users (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(50) UNIQUE NOT NULL,
+        name VARCHAR(100),
+        email VARCHAR(100) UNIQUE NOT NULL,
+        phone VARCHAR(20),
+        password VARCHAR(255) NOT NULL,
+        registered_courses INT[]
+      );
+    `);
+
+    // ตาราง courses
+    await pool.query(`
+      CREATE TABLE IF NOT EXISTS courses (
+        id SERIAL PRIMARY KEY,
+        title VARCHAR(255) NOT NULL,
+        description TEXT,
+        price NUMERIC
+      );
+    `);
+
+    // ใส่ตัวอย่าง courses ถ้ายังไม่มี
+    await pool.query(`
+      INSERT INTO courses (title, description, price)
+      VALUES
+        ('JavaScript for Beginners', 'เรียนรู้ JavaScript ตั้งแต่พื้นฐาน', 0),
+        ('React.js Masterclass', 'สร้างเว็บแอปด้วย React.js', 0)
+      ON CONFLICT (id) DO NOTHING;
+    `);
+
+    console.log("✅ Database initialized and sample data ready");
+  } catch (err) {
+    console.error("❌ Failed to initialize database", err);
+  }
+};
 //============================================================
 
 app.get("/courses/:id", async (req, res) => {
